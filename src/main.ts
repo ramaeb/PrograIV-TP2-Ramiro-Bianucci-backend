@@ -6,8 +6,17 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Activamos la validación automática global para todos los endpoints
   app.useGlobalPipes(new ValidationPipe());
+
+  app.enableCors({
+    // Reemplazá este string por la URL real que te dio Vercel para tu frontend
+    origin: [
+      'http://localhost:4200',
+      'https://progra-iv-tp-2-ramiro-bianucci-fron.vercel.app' 
+    ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // Permitir envío de cookies/headers de autenticación si hiciera falta
+  });
 
   await app.listen(3000);
 }
