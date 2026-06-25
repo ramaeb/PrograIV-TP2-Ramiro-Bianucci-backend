@@ -28,6 +28,6 @@ export class CreateUsuarioDto {
   perfil?: string; // "usuario" o "administrador"
 
   @IsNotEmpty()
-  @MinLength(6, { message: 'La contraseña debe tener al menos 6 caracteres.' })
+  @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres.' })
   clave!: string;
 }
