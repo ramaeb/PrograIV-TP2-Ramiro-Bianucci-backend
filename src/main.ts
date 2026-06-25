@@ -14,7 +14,7 @@ async function bootstrap() {
       'http://localhost:4200',
       'https://progra-iv-tp-2-ramiro-bianucci-fron.vercel.app' 
     ],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true, // Permitir envío de cookies/headers de autenticación si hiciera falta
   });
 
