@@ -17,7 +17,7 @@ export class CreateUsuarioDto {
   email!: string;
 
   @IsNotEmpty()
-  fechaNacimiento!: string; // Llega como string del input date de Angular
+  fechaNacimiento!: string; // Llega como string del input date
 
   @IsOptional()
   @IsString()

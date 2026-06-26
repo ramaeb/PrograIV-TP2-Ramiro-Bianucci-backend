@@ -16,6 +16,9 @@ export class Usuario extends Document {
   perfil!: string;
   
   @Prop({ required: true })
+  fechaNacimiento!: string;
+  
+  @Prop({ required: true })
   imagenPerfil!: string;
 }
 
