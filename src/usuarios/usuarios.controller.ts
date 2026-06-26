@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Body, UseInterceptors, UploadedFile, BadRequestException, Get , Param, NotFoundException} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
@@ -13,12 +13,23 @@ export class UsuariosController {
     @Body() createUsuarioDto: CreateUsuarioDto,
     @UploadedFile() file: Express.Multer.File
   ) {
-    // Validación: Si el archivo de imagen es obligatorio, lo chequeamos acá
+  
     if (!file) {
       throw new BadRequestException('La imagen de perfil es obligatoria.');
     }
 
     // Le pasamos el DTO y el archivo procesado al servicio
     return this.usuariosService.crear(createUsuarioDto, file);
+  }
+  
+  @Get('email/:email')
+  async findByEmail(@Param('email') email: string) { //PARAM actua como extractor de la ruta.
+    const usuario = await this.usuariosService.findOneByEmail(email);
+    
+    if (!usuario) {
+      throw new NotFoundException('No se encontró ningún usuario con ese correo electrónico.');
+    }
+    
+    return usuario;
   }
 }
