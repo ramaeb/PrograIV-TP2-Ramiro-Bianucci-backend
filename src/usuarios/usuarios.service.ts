@@ -15,35 +15,32 @@ export class UsuariosService {
     private cloudinaryService: CloudinaryService // Inyectamos el servicio de Cloudinary
   ) {}
 
-  // 2. Modificamos el método para recibir el DTO y el archivo de la imagen
+  
   async crear(createUsuarioDto: CreateUsuarioDto, file: Express.Multer.File): Promise<any> {
     const { email, username, clave, perfil, ...restoDatos } = createUsuarioDto;
 
-    // 3. Validar si el email ya existe en MongoDB
+
     const existeEmail = await this.findOneByEmail(email);
     if (existeEmail) {
       throw new ConflictException('Este correo electrónico ya está registrado.');
     }
 
-    // 4. Validar si el username ya existe en MongoDB
+    
     const existeUsername = await this.findOneByUsername(username);
     if (existeUsername) {
       throw new ConflictException('Este nombre de usuario ya está ocupado.');
     }
 
-    // 5. Encriptar la contraseña de forma segura antes de guardarla
+   
     const saltRounds = 10;
     const hashClave = await bcrypt.hash(clave, saltRounds);
 
-    // 6. Procesar la imagen de perfil
-    // Por ahora guardamos el nombre del archivo o la ruta local.
-    // (Si usás Cloudinary o AWS S3, acá subirías el file.buffer y guardarías la URL resultante)
+
     const urlImagenPerfil = await this.cloudinaryService.subirImagen(file);
 
-    // 7. Forzar perfil por defecto si no viene definido
+
     const perfilAsignado = perfil || 'usuario';
 
-    // 8. Crear la instancia del modelo con los datos procesados y seguros
     const usuarioParaGuardar = new this.usuarioModel({
       ...restoDatos,
       email,

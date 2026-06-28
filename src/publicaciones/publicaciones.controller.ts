@@ -4,6 +4,7 @@ import {
 } from '@nestjs/common';
 import { PublicacionesService } from './publicaciones.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { PublicacionDto } from './dto/create-publicacione.dto';
 
 @Controller('publicaciones')
 export class PublicacionesController {
@@ -13,13 +14,10 @@ export class PublicacionesController {
   @Post()
   @UseInterceptors(FileInterceptor('imagen'))
   async crear(
-    @Body() body: { titulo: string; descripcion: string; usuarioId: string; autorUsername: string },
+    @Body() createPublicacionDto: PublicacionDto,
     @UploadedFile() file?: Express.Multer.File
   ) {
-    if (!body.titulo || !body.descripcion || !body.usuarioId) {
-      throw new BadRequestException('Faltan datos obligatorios para la publicación.');
-    }
-    return this.publicacionesService.crear(body, file);
+    return this.publicacionesService.crear(createPublicacionDto, file);
   }
 
   // ○ Por GET: Listar con filtros, orden dinámico y paginación (limit/offset)

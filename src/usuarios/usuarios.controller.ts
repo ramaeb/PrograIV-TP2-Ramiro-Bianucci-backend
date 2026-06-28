@@ -17,8 +17,7 @@ export class UsuariosController {
     if (!file) {
       throw new BadRequestException('La imagen de perfil es obligatoria.');
     }
-
-    // Le pasamos el DTO y el archivo procesado al servicio
+    
     return this.usuariosService.crear(createUsuarioDto, file);
   }
   

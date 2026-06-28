@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Publicacion } from './entities/publicacion.entity';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { Console } from 'console';
 
 @Injectable()
 export class PublicacionesService {
@@ -21,10 +22,10 @@ export class PublicacionesService {
       titulo: datos.titulo,
       descripcion: datos.descripcion,
       usuarioId: new Types.ObjectId(datos.usuarioId),
-      autorUsername: datos.autorUsername,
+      autorUsuario: datos.autorUsuario,
       imagenUrl: urlImagen,
     });
-
+    console.log("creada");
     return nuevaPub.save();
   }
 

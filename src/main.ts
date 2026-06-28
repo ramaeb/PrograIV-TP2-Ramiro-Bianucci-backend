@@ -6,7 +6,10 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true, // Remueve propiedades del body que no estén en el DTO
+    forbidNonWhitelisted: true, // Tira error si mandan propiedades no permitidas
+  }));
 
   app.enableCors({
     // Reemplazá este string por la URL real que te dio Vercel para tu frontend
