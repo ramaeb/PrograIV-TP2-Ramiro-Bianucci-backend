@@ -9,7 +9,7 @@ import { PublicacionDto } from './dto/create-publicacione.dto';
 @Controller('publicaciones')
 export class PublicacionesController {
   constructor(private readonly publicacionesService: PublicacionesService) {}
-
+      
   // ○ Por POST: Alta de publicación con imagen opcional
   @Post()
   @UseInterceptors(FileInterceptor('imagen'))

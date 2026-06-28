@@ -1,31 +1,20 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { IsNotEmpty, IsString, Length } from 'class-validator';
 
-@Schema({ timestamps: true }) // Genera automáticamente createdAt y updatedAt
-export class PublicacionDto extends Document {
-  @Prop({ required: true })
+export class PublicacionDto {
+  @IsNotEmpty({ message: 'El título es obligatorio.' })
+  @IsString()
+  @Length(3, 100, { message: 'El título debe tener entre 3 y 100 caracteres.' })
   titulo!: string;
 
-  @Prop({ required: true })
+  @IsNotEmpty({ message: 'La descripción es obligatoria.' })
+  @IsString()
   descripcion!: string;
 
-  @Prop({ default: null })
-  imagenUrl!: string;
+  @IsNotEmpty({ message: 'El ID de usuario es obligatorio.' })
+  @IsString()
+  usuarioId!: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'Usuario', required: true })
-  usuarioId!: Types.ObjectId;
-
-  @Prop({ required: true })
-  autorUsuario!: string;
-
-  @Prop({ default: true })
-  activo!: boolean; // Para la baja lógica
-
-  @Prop({ type: [Types.ObjectId], default: [] })
-  likes!: Types.ObjectId[]; // Almacena qué IDs de usuarios dieron like
-
-  @Prop({ type: [Object], default: [] })
-  comentarios!: any[];
+  @IsNotEmpty({ message: 'El autor es obligatorio.' })
+  @IsString()
+  autorUsuario!: string; // Coincide con tu esquema actual y con Angular
 }
-
-export const PublicacionSchema = SchemaFactory.createForClass(PublicacionDto);

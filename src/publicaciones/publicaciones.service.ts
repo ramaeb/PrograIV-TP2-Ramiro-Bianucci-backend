@@ -4,6 +4,7 @@ import { Model, Types } from 'mongoose';
 import { Publicacion } from './entities/publicacion.entity';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { Console } from 'console';
+import { PublicacionDto } from './dto/create-publicacione.dto';
 
 @Injectable()
 export class PublicacionesService {
@@ -12,22 +13,25 @@ export class PublicacionesService {
     private cloudinaryService: CloudinaryService
   ) {}
 
-  async crear(datos: any, file?: Express.Multer.File) {
-    let urlImagen = '';
-    if (file) {
-      urlImagen = await this.cloudinaryService.subirImagen(file);
-    }
-
-    const nuevaPub = new this.pubModel({
-      titulo: datos.titulo,
-      descripcion: datos.descripcion,
-      usuarioId: new Types.ObjectId(datos.usuarioId),
-      autorUsuario: datos.autorUsuario,
-      imagenUrl: urlImagen,
-    });
-    console.log("creada");
-    return nuevaPub.save();
+  // Cambiá el inicio del método crear por este:
+async crear(datos: PublicacionDto, file?: Express.Multer.File) {
+  let urlImagen: string | null = null; // En lugar de ''
+  
+  if (file) {
+    urlImagen = await this.cloudinaryService.subirImagen(file);
   }
+
+  const nuevaPub = new this.pubModel({
+    titulo: datos.titulo,
+    descripcion: datos.descripcion,
+    usuarioId: new Types.ObjectId(datos.usuarioId),
+    autorUsuario: datos.autorUsuario,
+    imagenUrl: urlImagen, // Guarda la URL o null si no se seleccionó archivo
+  });
+
+  console.log("Publicación creada con éxito");
+  return nuevaPub.save();
+}
 
   async listar(orden: 'fecha' | 'likes', usuarioId?: string, limit: number = 10, offset: number = 0) {
     const filtro: any = { activo: true }; // Solo traemos las que no sufrieron baja lógica
