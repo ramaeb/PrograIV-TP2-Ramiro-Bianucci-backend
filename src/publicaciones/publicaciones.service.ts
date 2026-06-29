@@ -93,4 +93,46 @@ async crear(datos: PublicacionDto, file?: Express.Multer.File) {
     pub.likes = pub.likes.filter(id => !id.equals(userObjId));
     return pub.save();
   }
+  async agregarComentario(pubId: string, autorUsername: string, texto: string) {
+    const pub = await this.pubModel.findById(pubId);
+    if (!pub || !pub.activo) throw new NotFoundException('La publicación no existe o fue dada de baja.');
+
+    // Creamos el nuevo objeto comentario estructurado
+    const nuevoComentario = {
+      _id: new Types.ObjectId(),
+      autorUsername: autorUsername,
+      texto: texto,
+      fecha: new Date()
+    };
+
+    // Agregamos al array interno
+    pub.comentarios.push(nuevoComentario);
+    
+    // 💡 Le avisamos a Mongoose que modificamos manualmente este array para que guarde seguro los cambios
+    pub.markModified('comentarios'); 
+
+    return pub.save(); 
+  }
+  
+  async editarComentario(pubId: string, comentarioId: string, username: string, nuevoTexto: string) {
+    const pub = await this.pubModel.findById(pubId);
+    if (!pub || !pub.activo) throw new NotFoundException('La publicación no existe.');
+
+    // Buscamos el comentario dentro del array de la publicación
+    const comentario = pub.comentarios.find(c => c._id.toString() === comentarioId);
+    if (!comentario) throw new NotFoundException('El comentario no existe.');
+
+    // 🔒 Control estricto: Solo el creador del comentario puede editarlo
+    if (comentario.autorUsername !== username) {
+      throw new ForbiddenException('No tenés permisos para editar este comentario.');
+    }
+
+    // Actualizamos el contenido y marcamos como editado
+    comentario.texto = nuevoTexto;
+    comentario.editado = true; // 🎯 Flag para anunciar la edición
+    comentario.fechaEdicion = new Date(); // Opcional, por si querés guardar el rastro
+
+    pub.markModified('comentarios');
+    return pub.save(); // Retorna la publicación con los comentarios actualizados
+  }
 }

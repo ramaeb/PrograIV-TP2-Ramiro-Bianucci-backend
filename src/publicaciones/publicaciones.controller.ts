@@ -1,6 +1,7 @@
 import { 
   Controller, Post, Get, Delete, Body, Param, Query, 
-  UseInterceptors, UploadedFile, BadRequestException, HttpCode, HttpStatus 
+  UseInterceptors, UploadedFile, BadRequestException, HttpCode, HttpStatus, 
+  Put
 } from '@nestjs/common';
 import { PublicacionesService } from './publicaciones.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -51,5 +52,29 @@ export class PublicacionesController {
   @Delete(':id/like')
   async quitarLike(@Param('id') id: string, @Body('usuarioId') usuarioId: string) {
     return this.publicacionesService.quitarLike(id, usuarioId);
+  }
+
+  @Post(':id/comentario')
+  async agregarComentario(
+    @Param('id') id: string,
+    @Body() body: { autorUsername: string; texto: string }
+  ) {
+    if (!body.autorUsername || !body.texto) {
+      throw new BadRequestException('El nombre de autor y el texto del comentario son obligatorios.');
+    }
+    return this.publicacionesService.agregarComentario(id, body.autorUsername, body.texto);
+  }
+  
+  // ○ Por PUT: Permitir que un usuario edite su propio comentario
+  @Put(':id/comentario/:comentarioId')
+  async editarComentario(
+    @Param('id') id: string,
+    @Param('comentarioId') comentarioId: string,
+    @Body() body: { autorUsername: string; nuevoTexto: string }
+  ) {
+    if (!body.autorUsername || !body.nuevoTexto) {
+      throw new BadRequestException('El username del autor y el nuevo texto son obligatorios.');
+    }
+    return this.publicacionesService.editarComentario(id, comentarioId, body.autorUsername, body.nuevoTexto);
   }
 }
