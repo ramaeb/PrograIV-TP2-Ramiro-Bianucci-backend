@@ -30,8 +30,11 @@ export class CreateUsuarioDto {
   @IsNotEmpty()
   @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres.' })
   clave!: string;
-  
+
   @IsOptional()
   @IsBoolean()
   activo?: boolean;
+  static
+  @IsOptional()
+  imagenPerfil?: any; // test
 }

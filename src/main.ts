@@ -8,7 +8,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true, // Remueve propiedades del body que no estén en el DTO
-    forbidNonWhitelisted: true, // Tira error si mandan propiedades no permitidas
+    forbidNonWhitelisted: false, // Tira error si mandan propiedades no permitidas
   }));
 
   app.enableCors({
