@@ -59,21 +59,20 @@ export class UsuariosService {
 
     return usuarioSinClave;
   }
-  
-  //Cambia estado activo de un usuario
+
   async cambiarEstado(id: string, activo: boolean): Promise<Usuario> {
     const usuarioActualizado = await this.usuarioModel.findByIdAndUpdate(
       id, 
-      { activo }, 
-      { new: true } // Para que retorne el usuario con el cambio ya aplicado
+      { $set: { activo: activo } }, // 👈 Forzamos a MongoDB a crear o actualizar la propiedad real
+      { new: true } // Nos asegura que devuelva el documento con el cambio ya impactado
     ).select('-clave').exec();
 
     if (!usuarioActualizado) {
-      throw new Error('Usuario no encontrado'); // O un NotFoundException de NestJS
+      throw new Error('Usuario no encontrado'); 
     }
 
-  return usuarioActualizado;
-}
+    return usuarioActualizado;
+  }
   async findOneByUsername(username: string): Promise<Usuario | null> {
     return await this.usuarioModel.findOne({ username }).exec();
   }
