@@ -20,7 +20,10 @@ export class AuthService {
     if (!usuario) {
       throw new UnauthorizedException('Credenciales inválidas.');
     }
-
+    //desactivado.
+    if (usuario.activo === false) {
+      throw new UnauthorizedException('Tu cuenta ha sido deshabilitada por un administrador.');
+    }
     const claveValida = await bcrypt.compare(claveSinEncriptar, usuario.clave);
 
     if (!claveValida) {
