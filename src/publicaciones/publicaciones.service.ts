@@ -13,9 +13,8 @@ export class PublicacionesService {
     private cloudinaryService: CloudinaryService
   ) {}
 
-  // Cambiá el inicio del método crear por este:
 async crear(datos: PublicacionDto, file?: Express.Multer.File) {
-  let urlImagen: string | null = null; // En lugar de ''
+  let urlImagen: string | null = null;
   
   if (file) {
     urlImagen = await this.cloudinaryService.subirImagen(file);
@@ -56,7 +55,7 @@ async crear(datos: PublicacionDto, file?: Express.Multer.File) {
     const pub = await this.pubModel.findById(pubId);
     if (!pub || !pub.activo) throw new NotFoundException('La publicación no existe.');
 
-    // Validar permisos: Debe ser el dueño O un administrador
+    //o admin o dueño de la publicacion
     if (pub.usuarioId.toString() !== solicitanteId && perfil !== 'admin') {
       throw new ForbiddenException('No tenés permisos para dar de baja esta publicación.');
     }
@@ -113,7 +112,7 @@ async crear(datos: PublicacionDto, file?: Express.Multer.File) {
 
     return pub.save(); 
   }
-  
+
   async editarComentario(pubId: string, comentarioId: string, username: string, nuevoTexto: string) {
     const pub = await this.pubModel.findById(pubId);
     if (!pub || !pub.activo) throw new NotFoundException('La publicación no existe.');

@@ -11,7 +11,7 @@ import { PublicacionDto } from './dto/create-publicacione.dto';
 export class PublicacionesController {
   constructor(private readonly publicacionesService: PublicacionesService) {}
       
-  // ○ Por POST: Alta de publicación con imagen opcional
+  // Alta de publicación con imagen opcional
   @Post()
   @UseInterceptors(FileInterceptor('imagen'))
   async crear(
@@ -21,7 +21,7 @@ export class PublicacionesController {
     return this.publicacionesService.crear(createPublicacionDto, file);
   }
 
-  // ○ Por GET: Listar con filtros, orden dinámico y paginación (limit/offset)
+  // Listar con filtros, orden dinámico y paginación (limit/offset)
   @Get()
   async listar(
     @Query('orden') orden: 'fecha' | 'likes' = 'fecha',
@@ -32,7 +32,7 @@ export class PublicacionesController {
     return this.publicacionesService.listar(orden, usuarioId, +limit, +offset);
   }
 
-  // ○ Por DELETE: Baja lógica controlada por creador o admin
+  // Baja lógica controlada
   @Delete(':id')
   async darDeBaja(
     @Param('id') id: string,
@@ -41,19 +41,20 @@ export class PublicacionesController {
     return this.publicacionesService.bajaLogica(id, body.usuarioId, body.perfil);
   }
 
-  // ○ Por POST: Dar un único "Me gusta"
+  // Dar un único like
   @Post(':id/like')
   @HttpCode(HttpStatus.OK)
   async darLike(@Param('id') id: string, @Body('usuarioId') usuarioId: string) {
     return this.publicacionesService.darLike(id, usuarioId);
   }
 
-  // ○ Por DELETE: Quitar un "Me gusta" previamente realizado
+  //Quitar un "Me gusta" previamente realizado
   @Delete(':id/like')
   async quitarLike(@Param('id') id: string, @Body('usuarioId') usuarioId: string) {
     return this.publicacionesService.quitarLike(id, usuarioId);
   }
 
+  //agregando comentario
   @Post(':id/comentario')
   async agregarComentario(
     @Param('id') id: string,
@@ -65,10 +66,10 @@ export class PublicacionesController {
     return this.publicacionesService.agregarComentario(id, body.autorUsername, body.texto);
   }
   
-  // ○ Por PUT: Permitir que un usuario edite su propio comentario
+  //endpoint PUT
   @Put(':id/comentario/:comentarioId')
   async editarComentario(
-    @Param('id') id: string,
+    @Param('id') id: string, //Captura las variables de la URL
     @Param('comentarioId') comentarioId: string,
     @Body() body: { autorUsername: string; nuevoTexto: string }
   ) {

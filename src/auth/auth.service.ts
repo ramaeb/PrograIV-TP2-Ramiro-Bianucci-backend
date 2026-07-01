@@ -8,14 +8,12 @@ import * as bcrypt from 'bcrypt';
 export class AuthService {
   constructor(private readonly usuariosService: UsuariosService) {}
 
-  // LÓGICA DE REGISTRO SIMPLIFICADA
+  // LÓGICA DE REGISTRO
   async registrar(dto: CreateUsuarioDto, file: Express.Multer.File) {
-    // Le delegamos TODA la responsabilidad al servicio de usuarios
-    // Él se encarga de encriptar, validar y guardar la foto
     return await this.usuariosService.crear(dto, file);
   }
 
-  // LÓGICA DE LOGIN (Queda igual, impecable)
+  // LÓGICA DE LOGIN 
   async login(usuarioOCorreo: string, claveSinEncriptar: string) {
     const usuario = await this.usuariosService.findByEmailOrUsername(usuarioOCorreo);
 

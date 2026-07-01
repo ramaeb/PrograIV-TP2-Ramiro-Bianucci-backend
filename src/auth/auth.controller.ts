@@ -8,7 +8,7 @@
     constructor(private readonly authService: AuthService) {}
 
     @Post('registro')
-    // Interceptamos el archivo 'fotoPerfil' y lo dejamos guardado temporalmente en MEMORIA
+    // guardamos temp la foto de perfil
     @UseInterceptors(FileInterceptor('fotoPerfil')) 
     async registro(
       @Body() createUsuarioDto: CreateUsuarioDto,

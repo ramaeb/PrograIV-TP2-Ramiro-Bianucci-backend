@@ -15,10 +15,10 @@ export class UsuariosService {
     private cloudinaryService: CloudinaryService // Inyectamos el servicio de Cloudinary
   ) {}
 
-  
+  //crear usuario.
   async crear(createUsuarioDto: CreateUsuarioDto, file: Express.Multer.File): Promise<any> {
-    const { email, username, clave, perfil, ...restoDatos } = createUsuarioDto;
-
+    const { email, username, clave, perfil, activo, ...restoDatos } = createUsuarioDto;
+    
 
     const existeEmail = await this.findOneByEmail(email);
     if (existeEmail) {
@@ -46,7 +46,8 @@ export class UsuariosService {
       email,
       username,
       perfil: perfilAsignado,
-      clave: hashClave,         
+      clave: hashClave,
+      activo: activo !== undefined ? activo : true, // true por defecto 
       imagenPerfil: urlImagenPerfil 
     });
 
@@ -58,7 +59,21 @@ export class UsuariosService {
 
     return usuarioSinClave;
   }
+  
+  //Cambia estado activo de un usuario
+  async cambiarEstado(id: string, activo: boolean): Promise<Usuario> {
+    const usuarioActualizado = await this.usuarioModel.findByIdAndUpdate(
+      id, 
+      { activo }, 
+      { new: true } // Para que retorne el usuario con el cambio ya aplicado
+    ).select('-clave').exec();
 
+    if (!usuarioActualizado) {
+      throw new Error('Usuario no encontrado'); // O un NotFoundException de NestJS
+    }
+
+  return usuarioActualizado;
+}
   async findOneByUsername(username: string): Promise<Usuario | null> {
     return await this.usuarioModel.findOne({ username }).exec();
   }

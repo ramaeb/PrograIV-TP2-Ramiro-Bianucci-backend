@@ -16,5 +16,5 @@ export class PublicacionDto {
 
   @IsNotEmpty({ message: 'El autor es obligatorio.' })
   @IsString()
-  autorUsuario!: string; // Coincide con tu esquema actual y con Angular
+  autorUsuario!: string; 
 }
