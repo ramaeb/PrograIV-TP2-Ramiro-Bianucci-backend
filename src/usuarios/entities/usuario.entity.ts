@@ -20,6 +20,9 @@ export class Usuario extends Document {
   
   @Prop({ required: true })
   imagenPerfil!: string;
+
+  @Prop({ type: Boolean, default: true })
+  activo!: boolean;
 }
 
 export const UsuarioSchema = SchemaFactory.createForClass(Usuario);
