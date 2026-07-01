@@ -59,12 +59,16 @@ export class UsuariosService {
 
     return usuarioSinClave;
   }
+// Cambia estado activo de un usuario (Casteo estricto a Booleano)
+  async cambiarEstado(id: string, activo: any): Promise<Usuario> {
+    // Forzamos el casteo a booleano real. 
+    // Si viene el string "false", Boolean("false") da true en JS, por lo que es mejor compararlo directamente.
+    const valorBooleano = activo === true || activo === 'true';
 
-  async cambiarEstado(id: string, activo: boolean): Promise<Usuario> {
     const usuarioActualizado = await this.usuarioModel.findByIdAndUpdate(
       id, 
-      { $set: { activo: activo } }, // 👈 Forzamos a MongoDB a crear o actualizar la propiedad real
-      { new: true } // Nos asegura que devuelva el documento con el cambio ya impactado
+      { $set: { activo: valorBooleano } }, // Forzamos la inyección del booleano real
+      { new: true }
     ).select('-clave').exec();
 
     if (!usuarioActualizado) {
