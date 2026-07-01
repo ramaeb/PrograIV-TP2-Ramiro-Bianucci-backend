@@ -2,6 +2,7 @@ import { Controller, Post, Body, UseInterceptors, UploadedFile, BadRequestExcept
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import { CambiarEstadoDto } from './dto/cambiar-estado.dto';
 
 @Controller('api/usuarios')
 export class UsuariosController {
@@ -38,18 +39,19 @@ export class UsuariosController {
     return this.usuariosService.findAll();
   }
 
-  // Alta y baja logica
-  @Patch(':id/estado')
+  // Alta y baja lógica corregida
+ @Patch(':id/estado')
   async cambiarEstado(
     @Param('id') id: string,
-    @Body('activo') activo: boolean // Angular enviará { "activo": true/false }
+    @Body() cambiarEstadoDto: CambiarEstadoDto // Usamos la validación formal del DTO
   ) {
     try {
-      return await this.usuariosService.cambiarEstado(id, activo);
+      return await this.usuariosService.cambiarEstado(id, cambiarEstadoDto.activo);
     } catch (error) {
       throw new NotFoundException('No se pudo encontrar el usuario para cambiar su estado.');
     }
   }
+  
   //obtener mail
   @Get('email/:email')
   async findByEmail(@Param('email') email: string) { //PARAM actua como extractor de la ruta.

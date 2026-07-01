@@ -25,7 +25,7 @@ export class CreateUsuarioDto {
 
   @IsOptional()
   @IsString()
-  perfil?: string; // "usuario" o "administrador"
+  perfil?: string; // "usuario" o admin
 
   @IsNotEmpty()
   @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres.' })
@@ -34,7 +34,7 @@ export class CreateUsuarioDto {
   @IsOptional()
   @IsBoolean()
   activo?: boolean;
-  static
+
   @IsOptional()
   imagenPerfil?: any; // test
 }
