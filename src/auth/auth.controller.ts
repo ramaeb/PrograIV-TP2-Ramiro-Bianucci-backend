@@ -1,4 +1,4 @@
-  import { Controller, Post, Body, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+  import { Controller, Post, Body, UseInterceptors, UploadedFile, BadRequestException, UnauthorizedException, HttpStatus, HttpCode } from '@nestjs/common';
   import { AuthService } from './auth.service';
   import { CreateUsuarioDto } from '../usuarios/dto/create-usuario.dto';
   import { FileInterceptor } from '@nestjs/platform-express';
@@ -22,6 +22,7 @@
     }
 
     @Post('login')
+    @HttpCode(HttpStatus.OK)
     async login(@Body() body: { usuarioOCorreo: string; clave: string }) {
       if (!body.usuarioOCorreo || !body.clave) {
         throw new BadRequestException('Faltan datos de ingreso.');
@@ -29,4 +30,20 @@
       
       return this.authService.login(body.usuarioOCorreo, body.clave);
     }
+
+      //  Validar POR POST
+    @Post('validar')
+    @HttpCode(HttpStatus.OK) // NestJS por defecto en POST devuelve 201, forzamos 200 OK
+    validate(@Body('token') token: string) {
+      if (!token) throw new UnauthorizedException('Token requerido');
+      return this.authService.validarToken(token);
+    }
+
+    // REFRESCAR POR POST
+    @Post('refrescar')
+    @HttpCode(HttpStatus.OK)
+    refresh(@Body('token') token: string) {
+      if (!token) throw new UnauthorizedException('Token requerido');
+      return this.authService.refreshToken(token);
+  }
   }

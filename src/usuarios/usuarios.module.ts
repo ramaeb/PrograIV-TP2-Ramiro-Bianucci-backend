@@ -8,7 +8,7 @@ import { CloudinaryModule } from '../cloudinary/cloudinary.module'; // Importamo
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Usuario.name, schema: UsuarioSchema }]),
-    CloudinaryModule, // Lo registramos acá 🎯
+    CloudinaryModule, 
   ],
   controllers: [UsuariosController],
   providers: [UsuariosService],

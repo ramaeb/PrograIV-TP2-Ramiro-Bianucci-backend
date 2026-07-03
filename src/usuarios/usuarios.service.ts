@@ -12,7 +12,7 @@ export class UsuariosService {
   
   constructor(
     @InjectModel(Usuario.name) private usuarioModel: Model<Usuario>, //Modelo de mongoose para el usuario.
-    private cloudinaryService: CloudinaryService // Inyectamos el servicio de Cloudinary
+    private cloudinaryService: CloudinaryService 
   ) {}
 
   //crear usuario.
@@ -59,10 +59,9 @@ export class UsuariosService {
 
     return usuarioSinClave;
   }
-// Cambia estado activo de un usuario (Casteo estricto a Booleano)
+// Cambia estado activo de un usuario 
   async cambiarEstado(id: string, activo: any): Promise<Usuario> {
-    // Forzamos el casteo a booleano real. 
-    // Si viene el string "false", Boolean("false") da true en JS, por lo que es mejor compararlo directamente.
+   
     const valorBooleano = activo === true || activo === 'true';
 
     const usuarioActualizado = await this.usuarioModel.findByIdAndUpdate(
