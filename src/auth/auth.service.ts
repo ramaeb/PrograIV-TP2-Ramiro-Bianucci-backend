@@ -61,7 +61,7 @@ export class AuthService {
         id: payload.sub,
         username: payload.username,
         email: payload.email,
-        perfil: payload.role,
+        perfil: payload.perfil,
       };
     } catch (error) {
       //401

@@ -31,6 +31,7 @@ export class UsuariosService {
       throw new ConflictException('Este nombre de usuario ya está ocupado.');
     }
 
+    
    
     const saltRounds = 10;
     const hashClave = await bcrypt.hash(clave, saltRounds);

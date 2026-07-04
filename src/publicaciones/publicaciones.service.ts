@@ -45,7 +45,7 @@ async crear(datos: PublicacionDto, file?: Express.Multer.File) {
       query = query.sort({ createdAt: -1 }); // Más nuevas primero
       return query.exec();
     } else {
-      // Ordenar por cantidad de likes usando agregaciones o cálculo en memoria para simplificar
+      // Ordenar por cantidad de likes usando agregaciones
       const publicaciones = await query.exec();
       return publicaciones.sort((a, b) => b.likes.length - a.likes.length);
     }
