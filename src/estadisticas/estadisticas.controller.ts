@@ -4,9 +4,9 @@ import { FiltroFechaDto } from './dto/filtro-fecha.dto';
 import { AdminGuard } from '../guards/admin-guard/admin-guard.guard'; // Tu nuevo Guard
 
 @Controller('estadisticas')
-@UseGuards(AdminGuard) // 🚀 Protege automáticamente TODOS los endpoints de esta clase
+@UseGuards(AdminGuard) //guard
 export class EstadisticasController {
-  constructor(private readonly estadisticasService: EstadisticasService) {}
+  constructor(private readonly estadisticasService : EstadisticasService) {}
 
   @Get('posts-por-usuario')
   async postsPorUsuario(@Query() filtro: FiltroFechaDto) {

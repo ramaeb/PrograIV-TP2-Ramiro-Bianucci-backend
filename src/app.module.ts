@@ -10,7 +10,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { EstadisticasModule } from './estadisticas/estadisticas.module';
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb+srv://ramirobianucci_db_user:u3Y2nWujrrbUpaz0@bd-redsocial.gg111pi.mongodb.net/?appName=bd-redsocial'), AuthModule, UsuariosModule, PublicacionesModule, CloudinaryModule, EstadisticasModule,],
+  imports: [MongooseModule.forRoot('mongodb+srv://ramirobianucci_db_user:u3Y2nWujrrbUpaz0@bd-redsocial.gg111pi.mongodb.net/?appName=bd-redsocial'), AuthModule, UsuariosModule, PublicacionesModule, CloudinaryModule, EstadisticasModule],
   controllers: [AppController],
   providers: [AppService, CloudinaryService],
 })

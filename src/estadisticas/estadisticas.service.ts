@@ -6,7 +6,7 @@ import { Publicacion } from '../publicaciones/entities/publicacion.entity'; // A
 @Injectable()
 export class EstadisticasService {
   constructor(
-    @InjectModel('Publicacion') private readonly publicacionModel: Model<any>,
+    @InjectModel(Publicacion.name) private readonly publicacionModel: Model<any>,
   ) {}
 
   // 1. Cantidad de publicaciones por usuario en un lapso de tiempo

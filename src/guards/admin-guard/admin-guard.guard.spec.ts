@@ -1,7 +1,11 @@
-import { AdminGuardGuard } from './admin-guard.guard';
+import { AdminGuard } from './admin-guard.guard';
 
-describe('AdminGuardGuard', () => {
+describe('AdminGuard', () => {
   it('should be defined', () => {
-    expect(new AdminGuardGuard()).toBeDefined();
+    // 🚀 Creamos un objeto falso básico para cumplir con el constructor sin levantar NestJS
+    const mockJwtService = {} as any; 
+    
+    // Se lo pasamos por parámetro y listo el pollo
+    expect(new AdminGuard(mockJwtService)).toBeDefined();
   });
 });
