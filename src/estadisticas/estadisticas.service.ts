@@ -67,20 +67,20 @@ export class EstadisticasService {
   }
   // 🚪 Consigna 1: Cantidad de ingresos (log in) por usuario
   async getIngresosPorUsuario(fechaInicio: string, fechaFin: string) {
-    // Buscamos los usuarios y ordenamos por el contador de mayor a menor
     const usuarios = await this.usuarioModel
       .find({}, 'username contadorLogins')
       .sort({ contadorLogins: -1 })
       .limit(15)
       .exec();
 
-    // Mapeamos manualmente para asegurar el formato exacto que espera Chart.js
     return usuarios.map(u => ({
       _id: u.username || 'Anónimo',
-      cantidad: u.get('contadorLogins') || 0 // Si el campo no existe en el documento, devuelve 0
+      // 🚀 ERROR SOLUCIONADO: Accedemos a la propiedad directo, sin el .get()
+      cantidad: u.contadorLogins || 0 
     }));
   }
-  // ❤️ Consigna 3: Cantidad de me gusta (likes) otorgados por día en el lapso
+  
+  //  Cantidad de me gusta (likes) otorgados por día en el lapso
   async getLikesPorDia(fechaInicio: string, fechaFin: string) {
     return await this.publicacionModel.aggregate([
       // 1. Desarmamos el array de likes para tener un documento por cada corazón
@@ -101,6 +101,19 @@ export class EstadisticasService {
       // 4. Ordenamos de más viejo a más nuevo para el gráfico
       { $sort: { _id: 1 } }
     ]);
+  }
+  async getVisitasPerfilTerceros(fechaInicio: string, fechaFin: string) {
+    const usuarios = await this.usuarioModel
+      .find({}, 'username visitasDeTerceros')
+      .sort({ visitasDeTerceros: -1 })
+      .limit(10)
+      .exec();
+
+    return usuarios.map(u => ({
+      username: u.username || 'Perfil',
+      // 🚀 ERROR SOLUCIONADO: Accedemos a la propiedad directo, sin el .get()
+      cantidad: u.visitasDeTerceros || 0 
+    }));
   }
   
 }
