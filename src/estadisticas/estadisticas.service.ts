@@ -111,7 +111,7 @@ export class EstadisticasService {
 
     return usuarios.map(u => ({
       username: u.username || 'Perfil',
-      // 🚀 ERROR SOLUCIONADO: Accedemos a la propiedad directo, sin el .get()
+  
       cantidad: u.visitasDeTerceros || 0 
     }));
   }

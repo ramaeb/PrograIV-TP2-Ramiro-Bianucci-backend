@@ -30,14 +30,16 @@ export class EstadisticasController {
   }
 
   //sprint 5 
-  @Get('ingresos-usuario')
-  async ingresosUsuario(@Query() id: string) {
-    return this.usuariosService.registrarIngreso(id);
+ @Get('ingresos-usuario')
+  async ingresosUsuario(@Query() filtro: FiltroFechaDto) {
+    // Apunta al método de tu EstadisticasService que hace el .find() y el .map()
+    return this.estadisticasService.getIngresosPorUsuario(filtro.fechaInicio, filtro.fechaFin);
   }
 
   @Get('visitas-perfil')
-  async visitasPerfil(@Query() idVisitado: string) {
-    return this.usuariosService.registrarVisitaPerfil(idVisitado);
+  async visitasPerfil(@Query() filtro: FiltroFechaDto) {
+    // Apunta al método de tu EstadisticasService que retorna el ranking de perfiles más vistos
+    return this.estadisticasService.getVisitasPerfilTerceros(filtro.fechaInicio, filtro.fechaFin);
   }
 
   @Get('likes-por-dia')
