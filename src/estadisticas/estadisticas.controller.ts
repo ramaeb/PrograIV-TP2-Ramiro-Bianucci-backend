@@ -2,11 +2,15 @@ import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { EstadisticasService } from './estadisticas.service';
 import { FiltroFechaDto } from './dto/filtro-fecha.dto';
 import { AdminGuard } from '../guards/admin-guard/admin-guard.guard'; // Tu nuevo Guard
+import { UsuariosService } from '../usuarios/usuarios.service'; // Importa el servicio de usuarios
 
 @Controller('estadisticas')
 @UseGuards(AdminGuard) //guard
 export class EstadisticasController {
-  constructor(private readonly estadisticasService : EstadisticasService) {}
+  constructor(
+    private readonly estadisticasService: EstadisticasService,
+    private readonly usuariosService: UsuariosService
+  ) {}
 
   @Get('posts-por-usuario')
   async postsPorUsuario(@Query() filtro: FiltroFechaDto) {
@@ -27,13 +31,13 @@ export class EstadisticasController {
 
   //sprint 5 
   @Get('ingresos-usuario')
-  async ingresosUsuario(@Query() filtro: FiltroFechaDto) {
-    return this.estadisticasService.getIngresosPorUsuario(filtro.fechaInicio, filtro.fechaFin);
+  async ingresosUsuario(@Query() id: string) {
+    return this.usuariosService.registrarIngreso(id);
   }
 
   @Get('visitas-perfil')
-  async visitasPerfil(@Query() filtro: FiltroFechaDto) {
-    return this.estadisticasService.getVisitasPerfilTerceros(filtro.fechaInicio, filtro.fechaFin);
+  async visitasPerfil(@Query() idVisitado: string) {
+    return this.usuariosService.registrarVisitaPerfil(idVisitado);
   }
 
   @Get('likes-por-dia')
