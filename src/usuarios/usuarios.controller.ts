@@ -68,4 +68,14 @@ export class UsuariosController {
   async findByUsername(@Param('username') username: string) {
     return this.usuariosService.encontrarPorUsernameParaPerfil(username);
   }
+  // visita al perfil
+  @Patch(':id/registrar-visita')
+  async registrarVisita(@Param('id') id: string) {
+    try {
+      await this.usuariosService.registrarVisitaPerfil(id);
+      return { message: 'Visita registrada con éxito' };
+    } catch (error) {
+      throw new BadRequestException('No se pudo registrar la visita');
+    }
+  }
 }

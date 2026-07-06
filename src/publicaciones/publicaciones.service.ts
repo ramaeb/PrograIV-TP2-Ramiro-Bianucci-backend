@@ -70,12 +70,16 @@ async crear(datos: PublicacionDto, file?: Express.Multer.File) {
 
     const userObjId = new Types.ObjectId(usuarioId);
     
-    // Validar si ya le dio like
-    if (pub.likes.some(id => id.equals(userObjId))) {
+    // busca dentro de obj
+    if (pub.likes.some(like => like.usuarioId.equals(userObjId))) {
       throw new BadRequestException('Ya le diste me gusta a esta publicación.');
     }
 
-    pub.likes.push(userObjId);
+    // obj con fecha de hoy
+    pub.likes.push({ usuarioId: userObjId, fecha: new Date() });
+    
+    // Le avisamos a Mongoose de este cambio profundo
+    pub.markModified('likes');
     return pub.save();
   }
 
@@ -85,11 +89,15 @@ async crear(datos: PublicacionDto, file?: Express.Multer.File) {
 
     const userObjId = new Types.ObjectId(usuarioId);
 
-    if (!pub.likes.some(id => id.equals(userObjId))) {
+    // validacion
+    if (!pub.likes.some(like => like.usuarioId.equals(userObjId))) {
       throw new BadRequestException('No habías dado me gusta en esta publicación.');
     }
 
-    pub.likes = pub.likes.filter(id => !id.equals(userObjId));
+    //miramos id interno
+    pub.likes = pub.likes.filter(like => !like.usuarioId.equals(userObjId));
+    
+    pub.markModified('likes');
     return pub.save();
   }
   async agregarComentario(pubId: string, autorUsername: string, texto: string) {

@@ -21,8 +21,15 @@ export class Publicacion extends Document {
   @Prop({ default: true })
   activo!: boolean; // Para la baja lógica
 
-  @Prop({ type: [Types.ObjectId], default: [] })
-  likes!: Types.ObjectId[]; // Almacena qué IDs de usuarios dieron like
+  // asdas
+  @Prop({ 
+    type: [{ 
+      usuarioId: { type: Types.ObjectId, ref: 'Usuario' }, 
+      fecha: { type: Date, default: Date.now } 
+    }], 
+    default: [] 
+  })
+  likes!: { usuarioId: Types.ObjectId; fecha: Date }[];
 
   @Prop({ type: [Object], default: [] })
   comentarios!: any[];

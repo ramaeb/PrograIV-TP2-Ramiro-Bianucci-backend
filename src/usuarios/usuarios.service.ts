@@ -86,6 +86,24 @@ async encontrarPorUsernameParaPerfil(username: string): Promise<any> {
   }
   return usuario;
 }
+
+ // registro de ingreso para estadistica. devuelve una promise
+  async registrarIngreso(id: string): Promise<void> {
+    await this.usuarioModel.findByIdAndUpdate(
+      id,
+      { $inc: { contadorLogins: 1 } } // Suma 1 al valor actual de forma atómica
+    ).exec();
+  }
+
+  // registro de visita de perfil
+  async registrarVisitaPerfil(idVisitado: string): Promise<void> {
+    await this.usuarioModel.findByIdAndUpdate(
+      idVisitado,
+      { $inc: { visitasDeTerceros: 1 } }
+    ).exec();
+  }
+  
+  
   async findOneByUsername(username: string): Promise<Usuario | null> {
     return await this.usuarioModel.findOne({ username }).exec();
   }

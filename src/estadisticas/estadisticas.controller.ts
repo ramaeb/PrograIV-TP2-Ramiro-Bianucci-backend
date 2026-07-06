@@ -24,4 +24,21 @@ export class EstadisticasController {
     // Limpio y sin lógica repetida:
     return this.estadisticasService.getComentariosPorPost(filtro.fechaInicio, filtro.fechaFin);
   }
+
+  //sprint 5 
+  @Get('ingresos-usuario')
+  async ingresosUsuario(@Query() filtro: FiltroFechaDto) {
+    return this.estadisticasService.getIngresosPorUsuario(filtro.fechaInicio, filtro.fechaFin);
+  }
+
+  @Get('visitas-perfil')
+  async visitasPerfil(@Query() filtro: FiltroFechaDto) {
+    return this.estadisticasService.getVisitasPerfilTerceros(filtro.fechaInicio, filtro.fechaFin);
+  }
+
+  @Get('likes-por-dia')
+  async likesPorDia(@Query() filtro: FiltroFechaDto) {
+    return this.estadisticasService.getLikesPorDia(filtro.fechaInicio, filtro.fechaFin);
+  }
+  
 }

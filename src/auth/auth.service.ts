@@ -31,6 +31,7 @@ export class AuthService {
     if (!claveValida) {
       throw new UnauthorizedException('Credenciales inválidas.');
     }
+    await this.usuariosService.registrarIngreso(usuario._id.toString());
 
     const payload = { 
       sub: usuario._id, 
@@ -88,4 +89,5 @@ export class AuthService {
       throw new UnauthorizedException('No se pudo refrescar: Token inválido o vencido');
     }
   }
+ 
 }
