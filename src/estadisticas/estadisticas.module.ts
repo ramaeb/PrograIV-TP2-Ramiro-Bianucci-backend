@@ -6,11 +6,14 @@ import { Publicacion, PublicacionSchema } from 'src/publicaciones/entities/publi
 import { AuthModule } from 'src/auth/auth.module';
 import {UsuariosService} from "../usuarios/usuarios.service";
 import { UsuariosModule } from 'src/usuarios/usuarios.module';
+import { Usuario, UsuarioSchema } from '../usuarios/entities/usuario.entity';
 
 @Module({
   imports: [AuthModule,
     // 🚀 ¡CLAVE! Registramos el esquema para que EstadisticasService lo pueda inyectar
-    MongooseModule.forFeature([{ name: Publicacion.name, schema: PublicacionSchema }]), UsuariosModule
+    MongooseModule.forFeature([{ name: Publicacion.name, schema: PublicacionSchema }]),
+    MongooseModule.forFeature([{ name: Usuario.name, schema: UsuarioSchema }]),
+    UsuariosModule
   ],
   controllers: [EstadisticasController],
   providers: [EstadisticasService],
