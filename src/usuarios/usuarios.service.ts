@@ -1,4 +1,4 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -31,7 +31,7 @@ export class UsuariosService {
       throw new ConflictException('Este nombre de usuario ya está ocupado.');
     }
 
-    
+
    
     const saltRounds = 10;
     const hashClave = await bcrypt.hash(clave, saltRounds);
@@ -60,6 +60,7 @@ export class UsuariosService {
 
     return usuarioSinClave;
   }
+
 // Cambia estado activo de un usuario 
   async cambiarEstado(id: string, activo: any): Promise<Usuario> {
    
@@ -77,6 +78,14 @@ export class UsuariosService {
 
     return usuarioActualizado;
   }
+  //Buscando usuario para mostrar su perfil.
+async encontrarPorUsernameParaPerfil(username: string): Promise<any> {
+  const usuario = await this.usuarioModel.findOne({ username }).select('-clave').exec();
+  if (!usuario) {
+    throw new NotFoundException(`El usuario @${username} no existe.`);
+  }
+  return usuario;
+}
   async findOneByUsername(username: string): Promise<Usuario | null> {
     return await this.usuarioModel.findOne({ username }).exec();
   }
@@ -91,6 +100,9 @@ export class UsuariosService {
     }).exec();
   }
 
+  
+
+  //test
   async findAll() {
     return await this.usuarioModel.find().exec();
   }

@@ -63,4 +63,9 @@ export class UsuariosController {
     
     return usuario;
   }
+  // obteneniendo.
+  @Get('username/:username')
+  async findByUsername(@Param('username') username: string) {
+    return this.usuariosService.encontrarPorUsernameParaPerfil(username);
+  }
 }
