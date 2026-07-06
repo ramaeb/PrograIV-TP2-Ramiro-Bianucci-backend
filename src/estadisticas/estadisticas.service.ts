@@ -66,7 +66,7 @@ export class EstadisticasService {
     ]);
   }
   // 🚪 Consigna 1: Cantidad de ingresos (log in) por usuario
-  async getIngresosPorUsuario(fechaInicio: string, fechaFin: string) {
+  async getIngresosPorUsuario() {
     const usuarios = await this.usuarioModel
       .find({}, 'username contadorLogins')
       .sort({ contadorLogins: -1 })
@@ -75,7 +75,6 @@ export class EstadisticasService {
 
     return usuarios.map(u => ({
       _id: u.username || 'Anónimo',
-      // 🚀 ERROR SOLUCIONADO: Accedemos a la propiedad directo, sin el .get()
       cantidad: u.contadorLogins || 0 
     }));
   }
@@ -105,7 +104,7 @@ export class EstadisticasService {
       { $sort: { _id: 1 } }
     ]);
   }
-  async getVisitasPerfilTerceros(fechaInicio: string, fechaFin: string) {
+  async getVisitasPerfilTerceros() {
     const usuarios = await this.usuarioModel
       .find({}, 'username visitasDeTerceros')
       .sort({ visitasDeTerceros: -1 })

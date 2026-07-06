@@ -33,13 +33,13 @@ export class EstadisticasController {
  @Get('ingresos-usuario')
   async ingresosUsuario(@Query() filtro: FiltroFechaDto) {
     // Apunta al método de tu EstadisticasService que hace el .find() y el .map()
-    return this.estadisticasService.getIngresosPorUsuario(filtro.fechaInicio, filtro.fechaFin);
+    return this.estadisticasService.getIngresosPorUsuario();
   }
 
   @Get('visitas-perfil')
   async visitasPerfil(@Query() filtro: FiltroFechaDto) {
     // Apunta al método de tu EstadisticasService que retorna el ranking de perfiles más vistos
-    return this.estadisticasService.getVisitasPerfilTerceros(filtro.fechaInicio, filtro.fechaFin);
+    return this.estadisticasService.getVisitasPerfilTerceros();
   }
 
   @Get('likes-por-dia')
