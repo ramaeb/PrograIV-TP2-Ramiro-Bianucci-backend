@@ -2,11 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Publicacion } from '../publicaciones/entities/publicacion.entity'; // Ajustá la ruta a tu entidad
-
+import { Usuario } from '../usuarios/entities/usuario.entity'; // Ajustá la ruta a tu entidad
 @Injectable()
 export class EstadisticasService {
   constructor(
     @InjectModel(Publicacion.name) private readonly publicacionModel: Model<any>,
+    @InjectModel(Usuario.name) private readonly usuarioModel: Model<Usuario>,
   ) {}
 
   //publicaciones por usuario en un lapso de tiempo
@@ -63,6 +64,21 @@ export class EstadisticasService {
       { $sort: { cantidadComentarios: -1 } },
       { $limit: 10 }, // Limitamos a los 10 principales para no saturar el gráfico
     ]);
+  }
+  // 🚪 Consigna 1: Cantidad de ingresos (log in) por usuario
+  async getIngresosPorUsuario(fechaInicio: string, fechaFin: string) {
+    // Buscamos los usuarios y ordenamos por el contador de mayor a menor
+    const usuarios = await this.usuarioModel
+      .find({}, 'username contadorLogins')
+      .sort({ contadorLogins: -1 })
+      .limit(15)
+      .exec();
+
+    // Mapeamos manualmente para asegurar el formato exacto que espera Chart.js
+    return usuarios.map(u => ({
+      _id: u.username || 'Anónimo',
+      cantidad: u.get('contadorLogins') || 0 // Si el campo no existe en el documento, devuelve 0
+    }));
   }
   // ❤️ Consigna 3: Cantidad de me gusta (likes) otorgados por día en el lapso
   async getLikesPorDia(fechaInicio: string, fechaFin: string) {
