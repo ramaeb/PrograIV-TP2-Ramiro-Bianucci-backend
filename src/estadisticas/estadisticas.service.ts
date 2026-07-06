@@ -80,25 +80,28 @@ export class EstadisticasService {
     }));
   }
   
-  //  Cantidad de me gusta (likes) otorgados por día en el lapso
   async getLikesPorDia(fechaInicio: string, fechaFin: string) {
+    
+
+    const inicio = new Date(fechaInicio);
+    inicio.setUTCHours(0, 0, 0, 0); // Empieza a las 00:00:00
+
+    const fin = new Date(fechaFin);
+    fin.setUTCHours(23, 59, 59, 999); //(23:59:59)
+
     return await this.publicacionModel.aggregate([
-      // 1. Desarmamos el array de likes para tener un documento por cada corazón
       { $unwind: '$likes' }, 
-      // 2. Filtramos solo los likes que se dieron en el rango de fechas que pidió el front
       {
         $match: {
-          'likes.fecha': { $gte: new Date(fechaInicio), $lte: new Date(fechaFin) }
+          'likes.fecha': { $gte: inicio, $lte: fin }
         }
       },
-      // 3. Agrupamos por la fecha exacta (sin la hora)
       {
         $group: {
           _id: { $dateToString: { format: '%Y-%m-%d', date: '$likes.fecha' } },
-          cantidad: { $sum: 1 } // Contamos un like por cada documento
+          cantidad: { $sum: 1 } 
         }
       },
-      // 4. Ordenamos de más viejo a más nuevo para el gráfico
       { $sort: { _id: 1 } }
     ]);
   }
